@@ -104,4 +104,4 @@ dist
 .tern-port
 
 #Hidden Tokens
-config.txt
+config.json
