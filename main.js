@@ -69,7 +69,9 @@ client.on('message', async message => {
 					sendAllGods(message);
 				} else {
 					message.channel.send(allInfos.gods[findIndexfromID(allInfos.gods, args[1])].name);
-					message.channel.send(allInfos.gods[findIndexfromID(allInfos.gods, args[1])].text);
+					if (allInfos.gods[findIndexfromID(allInfos.gods, args[1])].text != null) {
+						message.channel.send(allInfos.gods[findIndexfromID(allInfos.gods, args[1])].text);
+					}
 				}
 				break;
 			/*
