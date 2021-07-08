@@ -15,6 +15,7 @@ client.login(config.discordBotToken);
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	getJSONFromSpreadsheet();
+	fs.writeFileSync('test.json', JSON.stringify('{"test" : "ceci est un test"}'))
 });
 
 client.on('message', async message => {
@@ -147,7 +148,7 @@ function sendFicheEmbed(message, id, isStat) {
 }
 
 function sendHelpEmbed(message) {
-    ficheEmbed = new Discord.MessageEmbed()
+    helpEmbed = new Discord.MessageEmbed()
 	.setColor("#717171")
 	.setTitle("Aide sur les Commandes")
 	.addFields(
@@ -161,7 +162,7 @@ function sendHelpEmbed(message) {
 	.setTimestamp()
 	.setFooter(message.author.username, message.author.avatarURL());
 
-	message.channel.send(ficheEmbed);
+	message.channel.send(helpEmbed);
 }
 
 /**
