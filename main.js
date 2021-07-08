@@ -6,6 +6,7 @@ const sheets = google.sheets('v4');
 const client = new Discord.Client();
 const spreadsheetID = config.spreadsheetID;
 
+getJSONFromSpreadsheet();
 let allStats = JSON.parse(fs.readFileSync("./stats.json", "utf8"));
 let allInfos = JSON.parse(fs.readFileSync("./database.json", "utf8"));
 
@@ -14,8 +15,6 @@ client.login(config.discordBotToken);
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
-	getJSONFromSpreadsheet();
-	fs.writeFileSync('test.json', JSON.stringify('{"test" : "ceci est un test"}'))
 });
 
 client.on('message', async message => {
