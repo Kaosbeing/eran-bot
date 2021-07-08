@@ -28,6 +28,10 @@ client.on('message', async message => {
 			default:
 				message.channel.send("⚠️ **Commande non reconnue**");
 				break;
+			case "AIDE":
+			case "HELP":
+				sendHelpEmbed(message); 
+				break;
             case "STATS": 
 				if(args[1] == null) { 
 					message.channel.send("⚠️ **Argument manquant**");
@@ -116,15 +120,12 @@ function sendAllGods(message) {
 }
 
 /**
- * BROKEN
- * Envoie un embed avec toutes les stats d'un perso
+ * Envoie un embed avec toutes les stats ou tous les statuts d'un perso
  */
 function sendFicheEmbed(message, id, isStat) {
     ficheEmbed = new Discord.MessageEmbed()
 	.setColor(allInfos.characInfos[id].color)
 	.setTitle(allInfos.characInfos[id].fullname)
-	/*.addFields(
-		{ name: "stat.fullname", value: allStats.values[12][3], inline: true })*/
 	.setThumbnail(allInfos.characInfos[id].image)
 	.setTimestamp()
 	.setFooter(message.author.username, message.author.avatarURL());
@@ -142,6 +143,24 @@ function sendFicheEmbed(message, id, isStat) {
 		});
 		ficheEmbed.setAuthor("Statut");
 	}
+	message.channel.send(ficheEmbed);
+}
+
+function sendHelpEmbed(message) {
+    ficheEmbed = new Discord.MessageEmbed()
+	.setColor("#717171")
+	.setTitle("Aide sur les Commandes")
+	.addFields(
+		{ name: "À propos :", value: "Toutes les commandes peuvent être effectuées avec ou sans majuscules, peu importe.\n <> = Impératif\n [] = facultatif" },
+		{ name: "STATS <initiales>", value: "Envoie une fiche contenant toutes les statistiques d'un personnage." },
+		{ name: "STATUT/STATUS <initiales>", value: "Envoie une fiche contenant toutes les informations relatives à l'état d'un personnage." },
+		{ name: "DATE", value: "Affiche la date actuelle de l'univers, définie par Ena'" },
+		{ name: "GOD/DIEU [numéro]", value: "Renvoie une liste de tous les dieux, ou seulement les informations d'un Dieu correspondant au numéro indiqué." },
+		{ name: "Initiales", value: "AA - Acateacas Amygdalus\n CR = Carliotte Roseline\n UZ = Uhr'Zak Kashir Ombo\n BB = Belphoebe Brunehilda\n MZ = Mohrus Zamtrak\n AK = Améthyste Kraken\n EK = Elenket Mzururaji\n EL = Eléanor Van Moscović\n KW = Elijah Graussdaron" }
+	)
+	.setTimestamp()
+	.setFooter(message.author.username, message.author.avatarURL());
+
 	message.channel.send(ficheEmbed);
 }
 

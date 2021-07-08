@@ -290,7 +290,7 @@
       "columnID": 1,
       "initials": "AA",
       "fullname": "Acateacas Amygdalus",
-      "color": "#000000",
+      "color": "#2ECC71",
       "image": null
     },
     {
@@ -298,7 +298,7 @@
       "columnID": 2,
       "initials": "CR",
       "fullname": "Carliotte Roseline",
-      "color": "#000000",
+      "color": "#735553",
       "image": "https://media.discordapp.net/attachments/767384515487989771/861311852423675914/illust_90077185_20210704_194518.png?width=536&height=676"
     },
     {
@@ -314,7 +314,7 @@
       "columnID": 4,
       "initials": "BB",
       "fullname": "Belphoebe Brunehilda",
-      "color": "#000000",
+      "color": "#2D5A2B",
       "image": "https://media.discordapp.net/attachments/767384515487989771/812832949380448296/Belphoebe_Brunehilda_Bellisama.jpg?width=478&height=676"
     },
     {
@@ -322,7 +322,7 @@
       "columnID": 5,
       "initials": "MZ",
       "fullname": "Mohrus Zamtrak",
-      "color": "#000000",
+      "color": "#008081",
       "image": "https://media.discordapp.net/attachments/767384515487989771/855591101464969227/757fb7453669d0453751c9910559fce4.png"
     },
     {
@@ -330,7 +330,7 @@
       "columnID": 6,
       "initials": "AK",
       "fullname": "Améthyste Kraken",
-      "color": "#000000",
+      "color": "#B89CE4",
       "image": "https://media.discordapp.net/attachments/767384515487989771/812813271098720286/818059b93941a89ab6045191be05a15e.png?width=338&height=676"
     },
     {
@@ -338,7 +338,7 @@
       "columnID": 7,
       "initials": "EK",
       "fullname": "Elenket Mzururaji",
-      "color": "#000000",
+      "color": "#FF20A9",
       "image": "https://media.discordapp.net/attachments/767384515487989771/812809656443207730/Elenket.jpg?width=482&height=676"
     },
     {
@@ -346,7 +346,7 @@
       "columnID": 8,
       "initials": "EL",
       "fullname": "Eléanor Van Moscović",
-      "color": "#000000",
+      "color": "#FF801C",
       "image": "https://media.discordapp.net/attachments/767384515487989771/861330373929336872/image0.png?width=499&height=676"
     },
     {
@@ -354,7 +354,7 @@
       "columnID": 9,
       "initials": "KW",
       "fullname": "Elijah Graussdaron",
-      "color": "#000000",
+      "color": "#ABB033",
       "image": "https://media.discordapp.net/attachments/767384515487989771/861576671148113970/Oreki.png?width=686&height=676"
     }
   ]
