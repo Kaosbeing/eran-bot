@@ -2,6 +2,7 @@ const config = require('./config.json');
 const Discord = require('discord.js');
 const fs = require('fs');
 const {google} = require('googleapis');
+const { parse } = require('path');
 const sheets = google.sheets('v4');
 const client = new Discord.Client();
 const spreadsheetID = config.spreadsheetID;
@@ -78,13 +79,80 @@ client.on('message', async message => {
 					}
 				}
 				break;
+			case "ROLL":
+				if (args[1] == null && args[2] == null) {
+					message.channel.send("⚠️ **Commande erronée**")
+					break;
+				} else if (args[1] != null && args[2] == null) {
+					rollTheDices(message, args);
+					break;
+				}
+				characStatTest(message, args);
+				break;
         }
     }
 });
 
 /**
+ * Lance des dés en fonction du nombre demandé
+ */
+function rollTheDices(message, args) {
+	let diceValues = args[1].split("D");
+	let rolls = [];
+	for (i=0; i<diceValues[0]; i++) {
+		rolls[i] = getRandomIntInclusive(1, diceValues[1])
+	}
+
+	let result = "```js\nRésultats : ";
+	for (i=0; i<rolls.length; i++) {
+		result += rolls[i];
+		result += " ";
+	}
+	return message.channel.send(result + "```");
+}
+
+/**
+ * Effectue un test sur la statistique d'un personnage
+ */
+function characStatTest(message, args) {
+	let statRolling = allInfos.statInfos[findIndexfromInitials(allInfos.statInfos, args[1])]
+	let characRolling = allInfos.characInfos[findIndexfromInitials(allInfos.characInfos, args[2])];
+
+	if (statRolling == null) {
+		return message.channel.send("⚠️ **Statistique erronée**");
+	} else if (characRolling == null) {
+		return message.channel.send("⚠️ **Initiales erronée**");
+	}
+
+	let statValue = allStats.values[statRolling.rowID][characRolling.columnID];
+	let modifier = args[3];
+	if (modifier == null) modifier = 0;
+	let roll = getRandomIntInclusive(1, 100);
+	
+	statValue = parseInt(statValue) + parseInt(modifier);
+
+	let diceEmbed = new Discord.MessageEmbed()
+	.setColor(characRolling.color)
+	.setTitle("Jet de " + statRolling.text + " pour " + characRolling.fullname)
+	.setThumbnail(characRolling.image)
+	.addField("Résultat du dé : " + roll, "Statistique (avec modificateur) : " + statValue)
+	.setTimestamp()
+	.setFooter(message.author.username, message.author.avatarURL());
+
+	if (roll >= 90) {
+		diceEmbed.addField("Échec critique !", "💀")
+	} else if (roll < 90 && statValue < roll) {
+		diceEmbed.addField("Échec !", "😵")
+	} else if (statValue >= roll && roll > 10) {
+		diceEmbed.addField("Réussite !", "💥")
+	} else if (statValue >= roll && roll <= 10) {
+		diceEmbed.addField("Réussite critique !", "🍀")
+	}
+	message.channel.send(diceEmbed);
+}
+
+/**
  * Envoie la liste de tous les dieux
- * @param {Discord.message} message 
  */
 function sendAllGods(message) {
     let allGodsString = "";
@@ -100,6 +168,10 @@ function sendAllGods(message) {
  * Envoie un embed avec toutes les stats ou tous les statuts d'un perso
  */
 function sendFicheEmbed(message, id, isStat) {
+	if (id == null) {
+		return message.channel.send("⚠️ **Initiales erronées**")
+	}
+
     ficheEmbed = new Discord.MessageEmbed()
 	.setColor(allInfos.characInfos[id].color)
 	.setTitle(allInfos.characInfos[id].fullname)
@@ -143,10 +215,6 @@ function sendHelpEmbed(message) {
 
 /**
  * Cherche l'index d'un objet correspondant à ses initiales
- * 
- * @param {JSON} file 
- * @param {string} initials 
- * @returns un ID
  */
 function findIndexfromInitials(file, initials) {
 	let foundIndex;
@@ -181,10 +249,6 @@ function findIndexFromType(file, type) {
 
 /**
  * Cherche l'index d'un objet correspondant à son ID
- * 
- * @param {JSON} file 
- * @param {string} initials 
- * @returns un ID
  */
  function findIndexfromID(file, id) {
 	let foundIndex;
@@ -196,6 +260,15 @@ function findIndexFromType(file, type) {
 	});
 
 	return foundIndex;
+}
+
+/**
+ * Renvoie un entier aléatoire entre deux nombres donnés
+ */
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min; 
 }
 
 /**
