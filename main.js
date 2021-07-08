@@ -2,7 +2,6 @@ const config = require('./config.json');
 const Discord = require('discord.js');
 const fs = require('fs');
 const {google} = require('googleapis');
-const { parse } = require('path');
 const sheets = google.sheets('v4');
 const client = new Discord.Client();
 const spreadsheetID = config.spreadsheetID;
