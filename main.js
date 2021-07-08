@@ -78,32 +78,9 @@ client.on('message', async message => {
 					}
 				}
 				break;
-			/*
-			case "FIND":
-				message.channel.send(findIndexfromInitials(message, args[1]));
-				break;
-			case "EDIT":
-				if(args[1] == null || args[2] == null || args[3] == null) { 
-					message.channel.send("⚠️ **Argument manquant**");
-					break;
-				} else if (findIndexfromInitials(allInfos.characInfos, args[1]) == null || findIndexfromInitials(allInfos.statInfos, args[2]) == null) {
-					message.channel.send("⚠️ **Argument invalide**");
-					break;
-				}
-				editAStat(message, args);
-				break;*/
         }
     }
 });
-
-/*function editAStat(message, args) {
-	let characToUpdate = findIndexfromInitials(allInfos.characInfos, args[1]).columnID + 1;
-	let statToUpdate = findIndexfromInitials(allInfos.statInfos, args[2]).rowID + 1;
-	let newValue = args[3];
-
-	let range = convertToA1Notation(characToUpdate, statToUpdate);
-	updateSpreadsheet (range, newValue);
-}*/
 
 /**
  * Envoie la liste de tous les dieux
@@ -219,26 +196,6 @@ function findIndexFromType(file, type) {
 	});
 
 	return foundIndex;
-}
-
-/**
- * Convertit deux chiffre en A1 Notation (utilisée par GSheet)
- * 
- * @param {int} colNum 
- * @param {int} rowNum 
- * @returns string
- */
- function convertToA1Notation(colNum, rowNum) {
-	let A1Notation = "";
-
-	let numToConvert = colNum;
-	let letter = String.fromCharCode(97 + numToConvert);
-
-	A1Notation += letter.toLocaleUpperCase();
-	A1Notation += rowNum;
-
-	console.log(A1Notation);
-	return A1Notation;
 }
 
 /**
