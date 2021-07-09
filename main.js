@@ -47,25 +47,19 @@ client.on('message', async message => {
 				}
 				sendFicheEmbed(message, findIndexfromInitials(allInfos.characInfos, args[1]), false);
 				break;
-			case "DATE":
-				if (args[1] == null) {
-					message.channel.send(allInfos.date);
-				} else if (args[2] == null) {
-					message.channel.send("⚠️ **Commande erronée**");
-				} else if (args[1] == "EDIT") {
-					refreshDatas();
-					dateToStore = message.content.slice(11);
-					allInfos.date = dateToStore;
-
-					fs.writeFileSync('./database.json', JSON.stringify(allInfos), err => {
-						if (err)
-							console.log(err);
-					})
-
-					message.channel.send('✅ **Date modifiée. Nouvelle date : "' + dateToStore + '"**')
-				} else {
-					message.channel.send("⚠️ **Commande erronée**");
+			case "MONEY":
+				if (args[1] == null || (args[1] == "EDIT" && args[2] == null || args[3] == null)) {
+					message.channel.send("⚠️ **Argument manquant**");
+					break;
+				} else if (args[1] == "EDIT" && args[2] != null || args[3] != null) {
+					editMoney(message, args);
+					break;
 				}
+				let characTotalMoney = allInfos.characInfos[findIndexfromInitials(allInfos.characInfos, args[1])];
+				convertMoney(message, characTotalMoney);
+				break;
+			case "DATE":
+				changeDate(message, args);
 				break;
 			case "GOD":
 			case "DIEU":
@@ -91,6 +85,60 @@ client.on('message', async message => {
         }
     }
 });
+
+/**
+ * Modifie la valeur de l'argent d'un perso dans database.json
+ */
+function editMoney(message, args) {
+	let CharacToEdit = findIndexfromInitials(allInfos.characInfos, args[2]);
+					
+	allInfos.characInfos[CharacToEdit].money = args[3];
+	fs.writeFileSync('./database.json', JSON.stringify(allInfos), err => {
+		if (err)
+			console.log(err);
+	})
+	message.channel.send("✅ **Argent de " + allInfos.characInfos[CharacToEdit].fullname + " mis à jour. Nouvelle valeur : " + allInfos.characInfos[CharacToEdit].money + ".**");
+}
+
+/**
+ * Convertit un nombre de PE en différentes autres pièces
+ */
+function convertMoney(message, charac) {
+	let PP = Math.floor(charac.money / 100000)
+	let remainder = charac.money % 100000;
+
+	let PO = Math.floor(remainder / 10000);
+	remainder = remainder % 10000;
+
+	let PA = Math.floor(remainder / 1000);
+	remainder = remainder % 1000;
+
+	let PB = Math.floor(remainder / 100);
+	remainder = remainder % 100;
+
+	let PC = Math.floor(remainder / 10);
+	remainder = remainder % 10;
+
+	let PE = remainder;
+
+	let moneyEmbed = new Discord.MessageEmbed()
+	.setColor(charac.color)
+	.setTitle("Argent de " + charac.fullname)
+	.setThumbnail(charac.image)
+	.addFields(
+		{ name : "Total", value : charac.money + " PE"},
+		{ name : "Pièce de Platine", value : PP, inline: true},
+		{ name : "Pièce d'Or", value : PO, inline: true},
+		{ name : "Pièce d'Argent", value : PA, inline: true},
+		{ name : "Pièce de Bronze", value : PB, inline: true},
+		{ name : "Pièce de de Cuivre", value : PC, inline: true},
+		{ name : "Pièce d'Étain", value : PE, inline: true},
+	)
+	.setTimestamp()
+	.setFooter(message.author.username, message.author.avatarURL());
+
+	message.channel.send(moneyEmbed);
+}
 
 /**
  * Lance des dés en fonction du nombre demandé
@@ -138,16 +186,45 @@ function characStatTest(message, args) {
 	.setTimestamp()
 	.setFooter(message.author.username, message.author.avatarURL());
 
-	if (roll >= 90) {
+	if (roll == 100) {
+		diceEmbed.addField("Échec super-critique !", "☠️")
+
+	} else if (roll >= 90 && roll < 100) {
 		diceEmbed.addField("Échec critique !", "💀")
-	} else if (roll < 90 && statValue < roll) {
+	} else if (roll < 90 && statValue < roll && roll > 10) {
 		diceEmbed.addField("Échec !", "😵")
 	} else if (statValue >= roll && roll > 10) {
 		diceEmbed.addField("Réussite !", "💥")
-	} else if (statValue >= roll && roll <= 10) {
+	} else if (roll <= 10 && roll > 1) {
 		diceEmbed.addField("Réussite critique !", "🍀")
+	} else if (roll == 1) {
+		diceEmbed.addField("Réussite super-critique !", "🤑")
 	}
 	message.channel.send(diceEmbed);
+}
+
+/**
+ * Change la date stockée dans la BD
+ */
+function changeDate(message, args) {
+	if (args[1] == null) {
+		message.channel.send(allInfos.date);
+	} else if (args[2] == null) {
+		message.channel.send("⚠️ **Commande erronée**");
+	} else if (args[1] == "EDIT") {
+		refreshDatas();
+		dateToStore = message.content.slice(11);
+		allInfos.date = dateToStore;
+
+		fs.writeFileSync('./database.json', JSON.stringify(allInfos), err => {
+			if (err)
+				console.log(err);
+		})
+
+		message.channel.send('✅ **Date modifiée. Nouvelle date : "' + dateToStore + '"**')
+	} else {
+		message.channel.send("⚠️ **Commande erronée**");
+	}
 }
 
 /**
@@ -204,6 +281,8 @@ function sendHelpEmbed(message) {
 		{ name: "STATUT/STATUS <initiales>", value: "Envoie une fiche contenant toutes les informations relatives à l'état d'un personnage." },
 		{ name: "DATE", value: "Affiche la date actuelle de l'univers, définie par Ena'" },
 		{ name: "GOD/DIEU [numéro]", value: "Renvoie une liste de tous les dieux, ou seulement les informations d'un Dieu correspondant au numéro indiqué." },
+		{ name: "ROLL <stat> <initiales> [modificateur]", value: "Effectue un test (d100) pour la statistique voulue, pour le personnage voulue. Applique un modificateur, si il est fournit." },
+		{ name: "ROLL <nombre>D<nombre>", value: "Roll un nombre définit de dés, de la valeur souhaitée. Comme DiceParser." },
 		{ name: "Initiales", value: "AA - Acateacas Amygdalus\n CR = Carliotte Roseline\n UZ = Uhr'Zak Kashir Ombo\n BB = Belphoebe Brunehilda\n MZ = Mohrus Zamtrak\n AK = Améthyste Kraken\n EK = Elenket Mzururaji\n EL = Eléanor Van Moscović\n KW = Elijah Graussdaron" }
 	)
 	.setTimestamp()
