@@ -48,7 +48,7 @@ client.on('message', async message => {
 				sendFicheEmbed(message, findIndexfromInitials(allInfos.characInfos, args[1]), false);
 				break;
 			case "MONEY":
-				if (args[1] == null || (args[1] == "EDIT" && args[2] == null || args[3] == null)) {
+				if (args[1] == null && (args[1] == "EDIT" && args[2] == null || args[3] == null)) {
 					message.channel.send("⚠️ **Argument manquant**");
 					break;
 				} else if (args[1] == "EDIT" && args[2] != null || args[3] != null) {
@@ -81,6 +81,13 @@ client.on('message', async message => {
 					break;
 				}
 				characStatTest(message, args);
+				break;
+			case "ELU":
+				if (args[1] == "EL" || args[1] == "CR") {
+					message.channel.send("Oui.")
+				} else {
+					message.channel.send("Non.")
+				}
 				break;
         }
     }
@@ -281,8 +288,8 @@ function sendHelpEmbed(message) {
 		{ name: "STATUT/STATUS <initiales>", value: "Envoie une fiche contenant toutes les informations relatives à l'état d'un personnage." },
 		{ name: "DATE", value: "Affiche la date actuelle de l'univers, définie par Ena'" },
 		{ name: "GOD/DIEU [numéro]", value: "Renvoie une liste de tous les dieux, ou seulement les informations d'un Dieu correspondant au numéro indiqué." },
-		{ name: "ROLL <stat> <initiales> [modificateur]", value: "Effectue un test (d100) pour la statistique voulue, pour le personnage voulue. Applique un modificateur, si il est fournit." },
-		{ name: "ROLL <nombre>D<nombre>", value: "Roll un nombre définit de dés, de la valeur souhaitée. Comme DiceParser." },
+		{ name: "ROLL <stat> <initiales> [modificateur]", value: "Effectue un test (d100) pour la statistique voulue, pour le personnage voulu. Applique un modificateur, si il est fourni." },
+		{ name: "ROLL <nombre>D<nombre>", value: "Roll un nombre défini de dés, de la valeur souhaitée. Comme DiceParser." },
 		{ name: "MONEY <initiales>", value: "Envoie une fiche contenant le total d'argent d'un personnage." },
 		{ name: "Initiales", value: "AA - Acateacas Amygdalus\n CR = Carliotte Roseline\n UZ = Uhr'Zak Kashir Ombo\n BB = Belphoebe Brunehilda\n MZ = Mohrus Zamtrak\n AK = Améthyste Kraken\n EK = Elenket Mzururaji\n EL = Eléanor Van Moscović\n KW = Elijah Graussdaron" }
 	)
