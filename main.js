@@ -276,14 +276,14 @@ function sendHelpEmbed(message) {
 	.setColor("#717171")
 	.setTitle("Aide sur les Commandes")
 	.addFields(
-		{ name: "À propos :", value: "Toutes les commandes peuvent être effectuées avec ou sans majuscules, peu importe.\n <> = Impératif\n [] = facultatif" },
+		{ name: "À propos :", value: "Toutes les commandes peuvent être effectuées avec ou sans majuscules, peu importe.\n <> = Impératif\n [] = Facultatif" },
 		{ name: "STATS <initiales>", value: "Envoie une fiche contenant toutes les statistiques d'un personnage." },
 		{ name: "STATUT/STATUS <initiales>", value: "Envoie une fiche contenant toutes les informations relatives à l'état d'un personnage." },
 		{ name: "DATE", value: "Affiche la date actuelle de l'univers, définie par Ena'" },
 		{ name: "GOD/DIEU [numéro]", value: "Renvoie une liste de tous les dieux, ou seulement les informations d'un Dieu correspondant au numéro indiqué." },
 		{ name: "ROLL <stat> <initiales> [modificateur]", value: "Effectue un test (d100) pour la statistique voulue, pour le personnage voulue. Applique un modificateur, si il est fournit." },
 		{ name: "ROLL <nombre>D<nombre>", value: "Roll un nombre définit de dés, de la valeur souhaitée. Comme DiceParser." },
-		{ name: "MONEY <initiales>", value: "Envoie une fiche contenant le totale d'argent d'un personnage." },
+		{ name: "MONEY <initiales>", value: "Envoie une fiche contenant le total d'argent d'un personnage." },
 		{ name: "Initiales", value: "AA - Acateacas Amygdalus\n CR = Carliotte Roseline\n UZ = Uhr'Zak Kashir Ombo\n BB = Belphoebe Brunehilda\n MZ = Mohrus Zamtrak\n AK = Améthyste Kraken\n EK = Elenket Mzururaji\n EL = Eléanor Van Moscović\n KW = Elijah Graussdaron" }
 	)
 	.setTimestamp()
