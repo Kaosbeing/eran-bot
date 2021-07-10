@@ -89,6 +89,24 @@ client.on('message', async message => {
 					message.channel.send("Non.")
 				}
 				break;
+			case "SESSION":
+				let characToUpdate = allInfos.characInfos[findIndexfromInitials(allInfos.characInfos, args[1])];
+				if (args[1] == null || (args[1] == "EDIT" && (args[2] == null || args[3] == null))) {
+					message.channel.send("⚠️ **Argument manquant**");
+				} else if (args[1] == "EDIT") {
+					characToUpdate = [findIndexfromInitials(allInfos.characInfos, args[2])];
+					let newDate = message.content.slice(17);
+
+					allInfos.characInfos[characToUpdate].nextsession = newDate;
+					fs.writeFileSync('./database.json', JSON.stringify(allInfos), err => {
+						if (err)
+							console.log(err);
+					})
+					message.channel.send("✅ **Session de " + allInfos.characInfos[characToUpdate].fullname + " mis à jour. Prochaine séance : " + allInfos.characInfos[characToUpdate].nextsession + ".**");
+					break;
+				}
+				message.channel.send("📆 **Prochaine séance de " + characToUpdate.fullname + " : " + characToUpdate.nextsession + ".**");
+				break;
         }
     }
 });
@@ -291,6 +309,7 @@ function sendHelpEmbed(message) {
 		{ name: "ROLL <stat> <initiales> [modificateur]", value: "Effectue un test (d100) pour la statistique voulue, pour le personnage voulu. Applique un modificateur, si il est fourni." },
 		{ name: "ROLL <nombre>D<nombre>", value: "Roll un nombre défini de dés, de la valeur souhaitée. Comme DiceParser." },
 		{ name: "MONEY <initiales>", value: "Envoie une fiche contenant le total d'argent d'un personnage." },
+		{ name: "SESSION <initiales>", value: "Affiche la prochaine date de JDR de ce personnage." },
 		{ name: "Initiales", value: "AA - Acateacas Amygdalus\n CR = Carliotte Roseline\n UZ = Uhr'Zak Kashir Ombo\n BB = Belphoebe Brunehilda\n MZ = Mohrus Zamtrak\n AK = Améthyste Kraken\n EK = Elenket Mzururaji\n EL = Eléanor Van Moscović\n KW = Elijah Graussdaron" }
 	)
 	.setTimestamp()
